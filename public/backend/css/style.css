@@ -64,6 +64,24 @@ body a:hover {
     text-decoration: none;
 }
 
+span.fa-thumb-styling-down {
+    font-size: 20px;
+    color: green;
+}
+
+span.fa-thumb-styling-up {
+    font-size: 20px;
+    color: red;
+}
+
+a.styling-edit {
+    font-size: 20px;
+}
+
+a.styling-delete {
+    font-size: 20px;
+}
+
 
 /*sidebar navigation*/
 

@@ -3,7 +3,7 @@
     <div class="table-agile-info">
         <div class="panel panel-default">
             <div class="panel-heading">
-                LIỆT KÊ DANH MỤC SẢN PHẨM
+                LIỆT KÊ SẢN PHẨM
             </div>
             <div class="row w3-res-tb">
                 <div class="col-sm-5 m-b-xs">
@@ -42,27 +42,34 @@
                                     <input type="checkbox"><i></i>
                                 </label>
                             </th>
-                            <th>Tên danh mục</th>
+                            <th>Tên sản phẩm</th>
+                            <th>Giá</th>
+                            <th>Hình ảnh</th>
+                            <th>Danh mục</th>
+                            <th>Thương hiệu</th>
                             <th>Hiển thị/Ẩn</th>
-                            <th>Ngày thêm</th>
                             <th style="width:30px;"></th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($all_category_product as $key => $cate_pro)
+                        @foreach($all_product as $key => $product_value)
                         <tr>
                             <td><label class="i-checks m-b-none"><input type="checkbox" name="post[]"><i></i></label></td>
-                            <td>{{$cate_pro->category_name}}</td>
+                            <td>{{$product_value->product_name}}</td>
+                            <td>{{$product_value->product_price}}</td>
+                            <td><img src="public/uploads/product/{{$product_value->product_image}}" height="100px" width="100px"></td>
+                            <td>{{$product_value->category_id}}</td>
+                            <td>{{$product_value->brand_id}}</td>
                             <td><span class="text-ellipsis">
                                     <?php
-                                        if($cate_pro->category_status==1){
+                                        if($product_value->product_status==1){
                                             ?>
-                                        <a href="{{ url('/unactive-category-product/'.$cate_pro->category_id)}}"><span class="fa-thumb-styling-down fa fa-thumbs-up"></span></a>
+                                        <a href="{{ url('/unactive-product/'.$product_value->product_id)}}"><span class="fa-thumb-styling-down fa fa-thumbs-up"></span></a>
                                         <?php
                                         }
                                         else{
                                             ?>
-                                        <a href="{{ url('/active-category-product/'.$cate_pro->category_id)}}"><span class="fa-thumb-styling-up fa fa-thumbs-down"></span></a>
+                                        <a href="{{ url('/active-product/'.$product_value->product_id)}}"><span class="fa-thumb-styling-up fa fa-thumbs-down"></span></a>
                                         <?php
                                         }
                                     ?>
@@ -71,10 +78,10 @@
                             </td>
                             <td><span class="text-ellipsis">26/3/2021</span></td>
                             <td>
-                                <a href="{{url('/edit-category-product/'.$cate_pro->category_id)}}" class="active styling-edit" ui-toggle-class="">
+                                <a href="{{url('/edit-product/'.$product_value->product_id)}}" class="active styling-edit" ui-toggle-class="">
                                     <i class="fa fa-pencil-square-o text-success text-active"></i>
                                 </a>
-                                <a onclick="return confirm('Bạn có chắc muốn xóa không?')"  href="{{url('/delete-category-product/'.$cate_pro->category_id)}}" class="active styling-delete" ui-toggle-class="">
+                                <a onclick="return confirm('Bạn có chắc muốn xóa không?')"  href="{{url('/delete-product/'.$product_value->product_id)}}" class="active styling-delete" ui-toggle-class="">
                                     <i class="fa fa-times text-danger text"></i>
                                 </a>
                             </td>
