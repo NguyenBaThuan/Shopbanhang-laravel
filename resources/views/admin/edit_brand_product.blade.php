@@ -26,6 +26,14 @@
                             <label for="exampleInputPassword1">Mô tả thương hiệu</label>
                             <textarea  style="resize:none" rows="8"  class="form-control" name="brand_product_desc">{{$edit_value->brand_desc}}</textarea>
                         </div>
+                        <div class="form-group">
+                            <label for="exampleInputPassword1">Hiển thị</label>
+                              <select name="brand_product_status" class="form-control input-sm m-bot15">
+                                    <option value="0">Ẩn</option>
+                                    <option value="1">Hiển thị</option>
+                                    
+                            </select>
+                        </div>
                         <button type="submit"  name="update_brand_product" class="btn btn-info">Cập nhật thương hiệu</button>
                     </form>
                     </div>

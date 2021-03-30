@@ -4001,3 +4001,7 @@ span.text-alert {
     text-align: center;
     width: 100%;
 }
+
+div.brands-name {
+    padding: 0;
+}

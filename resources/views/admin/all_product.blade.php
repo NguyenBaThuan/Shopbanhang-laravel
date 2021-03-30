@@ -58,8 +58,8 @@
                             <td>{{$product_value->product_name}}</td>
                             <td>{{$product_value->product_price}}</td>
                             <td><img src="public/uploads/product/{{$product_value->product_image}}" height="100px" width="100px"></td>
-                            <td>{{$product_value->category_id}}</td>
-                            <td>{{$product_value->brand_id}}</td>
+                            <td>{{$product_value->category_name}}</td>
+                            <td>{{$product_value->brand_name}}</td>
                             <td><span class="text-ellipsis">
                                     <?php
                                         if($product_value->product_status==1){
