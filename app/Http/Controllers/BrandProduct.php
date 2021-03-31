@@ -39,6 +39,7 @@ class BrandProduct extends Controller
         $data = new BrandModel();
         $data->brand_name = $request->brand_product_name;
         $data->brand_desc = $request->brand_product_desc;
+        $data->brand_slug =  $request->brand_slug;
         $data->brand_status = $request->brand_product_status;
         $data->save();
         Session::put('message','thêm thương hiệu sản phẩm thành công');
@@ -72,6 +73,7 @@ class BrandProduct extends Controller
         // $brand = new Brand();
         $brand->brand_name = $data['brand_product_name'];
         $brand->brand_desc = $data['brand_product_desc'];
+        $brand->brand_slug = $data['brand_product_slug'];
         $brand->brand_status = $data['brand_product_status'];
         $brand->save();
         Session::put('message','Cập nhật thương hiệu sản phẩm thành công');
@@ -86,11 +88,23 @@ class BrandProduct extends Controller
     }
 
     //End function admin pages
-    public function show_brand_home($brand_id){
+    public function show_brand_home(Request $request ,$brand_slug){
         $cate_product = CategoryProductModel::where('category_status',1)->orderby('category_id','desc')->get();
         $brand_product = BrandModel::where('brand_status',1)->orderby('brand_id','desc')->get();
-        $brand_by_id = DB::table('tbl_product')->join('tbl_brand','tbl_product.brand_id','=','tbl_brand.brand_id')->where('tbl_product.brand_id',$brand_id)->get();
-        $brand_name = DB::table('tbl_brand')->where('brand_id',$brand_id)->limit(1)->get();
-        return view('pages.brand.show_brand',compact('brand_product','cate_product','brand_by_id','brand_name'));
+         
+        $brand_by_id = DB::table('tbl_product')->join('tbl_brand','tbl_product.brand_id','=','tbl_brand.brand_id')->where('tbl_brand.brand_slug',$brand_slug)->paginate(6);
+
+        $brand_name = DB::table('tbl_brand')->where('tbl_brand.brand_slug',$brand_slug)->limit(1)->get();
+
+        foreach($brand_name as $key => $val){
+            //seo 
+            $meta_desc = $val->brand_desc; 
+            $meta_keywords = $val->brand_desc;
+            $meta_title = $val->brand_name;
+            $url_canonical = $request->url();
+            //--seo
+        }
+
+        return view('pages.brand.show_brand',compact('brand_product','cate_product','brand_by_id','brand_name','meta_desc','meta_keywords','meta_title','url_canonical'));
     }
 }

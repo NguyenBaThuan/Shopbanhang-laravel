@@ -19,7 +19,7 @@
                             {{ csrf_field() }}
                         <div class="form-group">
                             <label for="exampleInputEmail1">Tên sản phẩm</label>
-                            <input type="text" name="product_name" class="form-control" id="exampleInputEmail1" placeholder="Tên sản phẩm">
+                            <input data-validation="length" data-validation-length="min3" data-validation-err-message="Tên sản phẩm ít nhất 3 kí tự" type="text" name="product_name" class="form-control" id="exampleInputEmail1" placeholder="Tên sản phẩm">
                         </div>
                         <div class="form-group">
                             <label for="exampleInputEmail1">Giá sản phẩm</label>
@@ -31,11 +31,11 @@
                         </div>
                         <div class="form-group">
                             <label for="exampleInputPassword1">Mô tả sản phẩm</label>
-                            <textarea style="resize:none" rows="8"  class="form-control" name="product_desc" placeholder="Mô tả sản phẩm"> </textarea>
+                            <textarea id="ckeditor1" style="resize:none" rows="8"  class="form-control" name="product_desc" placeholder="Mô tả sản phẩm"> </textarea>
                         </div>
                         <div class="form-group">
                             <label for="exampleInputPassword1">Nội dung sản phẩm</label>
-                            <textarea style="resize:none" rows="8"  class="form-control" name="product_content" placeholder="Nội dung sản phẩm"> </textarea>
+                            <textarea id="ckeditor" style="resize:none" rows="8"  class="form-control" name="product_content" placeholder="Nội dung sản phẩm"> </textarea>
                         </div>
                     
                         <div class="form-group">

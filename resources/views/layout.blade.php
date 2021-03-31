@@ -3,9 +3,23 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="">
+    <!---------Seo--------->
+    <meta name="description" content="{{$meta_desc}}">
+    <meta name="keywords" content="{{$meta_keywords}}"/>
+    <meta name="robots" content="INDEX,FOLLOW"/>
+    <link  rel="canonical" href="{{$url_canonical}}" />
     <meta name="author" content="">
-    <title>Home | E-Shopper</title>
+    <link  rel="icon" type="image/x-icon" href="" />
+    
+    {{--   <meta property="og:image" content="{{$image_og}}" />  
+      <meta property="og:site_name" content="http://localhost/tutorial_youtube/shopbanhanglaravel" />
+      <meta property="og:description" content="{{$meta_desc}}" />
+      <meta property="og:title" content="{{$meta_title}}" />
+      <meta property="og:url" content="{{$url_canonical}}" />
+      <meta property="og:type" content="website" /> --}}
+    <!--//-------Seo--------->
+
+    <title>{{$meta_title}}</title>
     <link href="{{asset('public/frontend/css/bootstrap.min.css')}}" rel="stylesheet">
     <link href="{{asset('public/frontend/css/font-awesome.min.css')}}" rel="stylesheet">
     <link href="{{asset('public/frontend/css/prettyPhoto.css')}}" rel="stylesheet">
@@ -13,7 +27,8 @@
     <link href="{{asset('public/frontend/css/animate.css')}}" rel="stylesheet">
 	<link href="{{asset('public/frontend/css/main.css')}}" rel="stylesheet">
 	<link href="{{asset('public/frontend/css/responsive.css')}}" rel="stylesheet">     
-    <link rel="shortcut icon" href="public/frontend/images/favicon.ico">
+    <link rel="shortcut icon" href="{{asset('public/frontend/images/favicon.ico')}}">
+	<link rel="stylesheet" href="{{asset('public/frontend/css/sweetalert.css')}}">
     <link rel="apple-touch-icon-precomposed" sizes="144x144" href="images/apple-touch-icon-144-precomposed.png">
     <link rel="apple-touch-icon-precomposed" sizes="114x114" href="images/apple-touch-icon-114-precomposed.png">
     <link rel="apple-touch-icon-precomposed" sizes="72x72" href="images/apple-touch-icon-72-precomposed.png">
@@ -81,14 +96,46 @@
 					</div>
 					<div class="col-sm-8">
 						<div class="shop-menu pull-right">
-							<ul class="nav navbar-nav">
-								<li><a href="#"><i class="fa fa-user"></i> Account</a></li>
-								<li><a href="#"><i class="fa fa-star"></i> Wishlist</a></li>
-								<li><a href="checkout.html"><i class="fa fa-crosshairs"></i> Checkout</a></li>
-								<li><a href="cart.html"><i class="fa fa-shopping-cart"></i> Cart</a></li>
-								<li><a href="login.html"><i class="fa fa-lock"></i> Login</a></li>
-							</ul>
-						</div>
+                            <ul class="nav navbar-nav">
+                               
+                                <li><a href="#"><i class="fa fa-star"></i> Yêu thích</a></li>
+                                <?php
+                                   $customer_id = Session::get('customer_id');
+                                   $shipping_id = Session::get('shipping_id');
+                                   if($customer_id!=NULL && $shipping_id==NULL){ 
+                                 ?>
+                                  <li><a href="{{URL::to('/checkout')}}"><i class="fa fa-crosshairs"></i> Thanh toán</a></li>
+                                
+                                <?php
+                                 }elseif($customer_id!=NULL && $shipping_id!=NULL){
+                                 ?>
+                                 <li><a href="{{URL::to('/payment')}}"><i class="fa fa-crosshairs"></i> Thanh toán</a></li>
+                                 <?php 
+                                }else{
+                                ?>
+                                 <li><a href="{{URL::to('/dang-nhap')}}"><i class="fa fa-crosshairs"></i> Thanh toán</a></li>
+                                <?php
+                                 }
+                                ?>
+                                
+
+                                <li><a href="{{URL::to('/gio-hang')}}"><i class="fa fa-shopping-cart"></i> Giỏ hàng</a></li>
+                                <?php
+                                   $customer_id = Session::get('customer_id');
+                                   if($customer_id!=NULL){ 
+                                 ?>
+                                  <li><a href="{{URL::to('/logout-checkout')}}"><i class="fa fa-lock"></i> Đăng xuất</a></li>
+                                
+                                <?php
+                            }else{
+                                 ?>
+                                 <li><a href="{{URL::to('/dang-nhap')}}"><i class="fa fa-lock"></i> Đăng nhập</a></li>
+                                 <?php 
+                             }
+                                 ?>
+                               
+                            </ul>
+                        </div>
 					</div>
 				</div>
 			</div>
@@ -97,7 +144,7 @@
 		<div class="header-bottom"><!--header-bottom-->
 			<div class="container">
 				<div class="row">
-					<div class="col-sm-9">
+					<div class="col-sm-7">
 						<div class="navbar-header">
 							<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
 								<span class="sr-only">Toggle navigation</span>
@@ -123,10 +170,14 @@
 							</ul>
 						</div>
 					</div>
-					<div class="col-sm-3">
-						<div class="search_box  pull-right">
-							<input type="text" placeholder="Search"/>
-						</div>
+					<div class="col-sm-5">
+						<form action="{{URL::to('/tim-kiem')}}" method="POST">
+                            {{csrf_field()}}
+                        <div class="search_box pull-right">
+                            <input type="text" name="keywords_submit" placeholder="Tìm kiếm sản phẩm"/>
+                            <input type="submit" style="margin-top:0;color:#666" name="search_items" class="btn btn-primary btn-sm" value="Tìm kiếm">
+                        </div>
+                        </form>
 					</div>
 				</div>
 			</div>
@@ -208,7 +259,7 @@
 							@foreach($cate_product as $key => $cate)
 							<div class="panel panel-default">
 								<div class="panel-heading">
-									<h4 class="panel-title"><a href="{{url('/danh-muc-san-pham/'.$cate->category_id)}}">{{$cate->category_name}}</a></h4>
+									<h4 class="panel-title"><a href="{{url('/danh-muc/'.$cate->slug_category_product)}}">{{$cate->category_name}}</a></h4>
 								</div>
 							</div>
 							@endforeach
@@ -220,7 +271,7 @@
 							<div class="brands-name">
 								<ul class="nav nav-pills nav-stacked">
 									<li>
-										<a href="{{url('/thuong-hieu-san-pham/'.$brand_value->brand_id)}}"><span class="pull-right">(50)</span>{{$brand_value->brand_name}}</a>
+										<a href="{{url('/thuong-hieu/'.$brand_value->brand_slug)}}"><span class="pull-right">(50)</span>{{$brand_value->brand_name}}</a>
 									</li>
 								</ul>
 							</div>
@@ -403,5 +454,53 @@
 	<script src="{{asset('public/frontend/js/price-range.js')}}"></script>
     <script src="{{asset('public/frontend/js/jquery.prettyPhoto.js')}}"></script>
     <script src="{{asset('public/frontend/js/main.js')}}"></script>
+	<script src="{{asset('public/frontend/js/sweetalert.js')}}"></script>
+
+	<script type="text/javascript">
+		 $(document).ready(function(){
+            $('.add-to-cart').click(function(){
+
+                var id = $(this).data('id_product');
+                var cart_product_id = $('.cart_product_id_' + id).val();
+                var cart_product_name = $('.cart_product_name_' + id).val();
+                var cart_product_image = $('.cart_product_image_' + id).val();
+                var cart_product_quantity = $('.cart_product_quantity_' + id).val();
+                var cart_product_price = $('.cart_product_price_' + id).val();
+                var cart_product_qty = $('.cart_product_qty_' + id).val();
+                var _token = $('input[name="_token"]').val();
+                if(parseInt(cart_product_qty)>parseInt(cart_product_quantity)){
+                    alert('Làm ơn đặt nhỏ hơn ' + cart_product_quantity);
+                }else{
+
+                    $.ajax({
+                        url: '{{url('/add-cart-ajax')}}',
+                        method: 'POST',
+                        data:{cart_product_id:cart_product_id,cart_product_name:cart_product_name,cart_product_image:cart_product_image,cart_product_price:cart_product_price,cart_product_qty:cart_product_qty,_token:_token,cart_product_quantity:cart_product_quantity},
+                        success:function(data){
+
+                            swal({
+                                    title: "Đã thêm sản phẩm vào giỏ hàng",
+                                    text: "Bạn có thể mua hàng tiếp hoặc tới giỏ hàng để tiến hành thanh toán",
+                                    showCancelButton: true,
+                                    cancelButtonText: "Xem tiếp",
+                                    confirmButtonClass: "btn-success",
+                                    confirmButtonText: "Đi đến giỏ hàng",
+                                    closeOnConfirm: false
+                                },
+                                function() {
+                                    window.location.href = "{{url('/gio-hang')}}";
+                                });
+
+                        }
+
+                    });
+                }
+
+                
+            });
+        });
+
+
+	</script>
 </body>
 </html>

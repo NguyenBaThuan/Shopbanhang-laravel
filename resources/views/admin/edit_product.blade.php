@@ -33,11 +33,11 @@
                         </div>
                         <div class="form-group">
                             <label for="exampleInputPassword1">Mô tả sản phẩm</label>
-                            <textarea style="resize:none" rows="8"  class="form-control" name="product_desc">{{$edit_value->product_desc}}"</textarea>
+                            <textarea id="ckeditor"  style="resize:none" rows="8"  class="form-control" name="product_desc">{{$edit_value->product_desc}}"</textarea>
                         </div>
                         <div class="form-group">
                             <label for="exampleInputPassword1">Nội dung sản phẩm</label>
-                            <textarea style="resize:none" rows="8"  class="form-control" name="product_content" placeholder="Nội dung sản phẩm">{{$edit_value->product_content}}"</textarea>
+                            <textarea id="ckeditor1" style="resize:none" rows="8"  class="form-control" name="product_content" placeholder="Nội dung sản phẩm">{{$edit_value->product_content}}"</textarea>
                         </div>
                         
                         <div class="form-group">

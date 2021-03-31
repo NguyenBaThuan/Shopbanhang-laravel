@@ -32,6 +32,7 @@
     <link rel="stylesheet" href="{{asset('public/backend/css/morris.css')}}" type="text/css" />
     <!-- calendar -->
     <link rel="stylesheet" href="{{asset('public/backend/css/monthly.css')}}">
+    <link rel="stylesheet" href="{{asset('public/backend/css/formValidation.min.css')}}">
     <!-- //calendar -->
     <!-- //font-awesome icons -->
     <script src="{{asset('public/backend/js/jquery2.0.3.min.js')}}"></script>
@@ -340,6 +341,20 @@
     <script src="{{asset('public/backend/js/jquery.nicescroll.js')}}"></script>
     <!--[if lte IE 8]><script language="javascript" type="text/javascript" src="public/backend/js/flot-chart/excanvas.min.js"></script><![endif]-->
     <script src="{{asset('public/backend/js/jquery.scrollTo.js')}}"></script>
+    <script src="{{asset('public/backend/ckeditor/ckeditor.js')}}"></script>
+    <script type="text/javascript">
+        CKEDITOR.replace('ckeditor');
+        CKEDITOR.replace('ckeditor1');
+    </script>
+    <script src="{{asset('public/backend/js/formValidation.min.js')}}"></script>
+    <script type="text/javascript">
+        $.validate({
+
+        });
+    </script>
+
+
+
     <!-- morris JavaScript -->
     <script>
         $(document).ready(function() {

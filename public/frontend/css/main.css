@@ -11,6 +11,11 @@ body {
     font-weight: 400px;
 }
 
+.productinfo.text-center img {
+    height: 225px;
+    width: 200px;
+}
+
 ul li {
     list-style: none;
 }

@@ -6,6 +6,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CategoryProduct;
 use App\Http\Controllers\BrandProduct;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\CartController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,10 +21,11 @@ use App\Http\Controllers\ProductController;
 //Frontend
 Route::get('/',[HomeController::class, 'index']);
 Route::get('/trang-chu',[HomeController::class, 'index']);
-
+Route::post('/tim-kiem',[HomeController::class, 'search']);
 // Danh mục sản phẩm trang-chu
-Route::get('/danh-muc-san-pham/{catetory_id}',[CategoryProduct::class, 'show_category_home']);
-Route::get('/thuong-hieu-san-pham/{brand_id}',[BrandProduct::class, 'show_brand_home']);
+Route::get('/danh-muc/{slug_category_product}',[CategoryProduct::class, 'show_category_home']);
+Route::get('/thuong-hieu/{brand_slug}',[BrandProduct::class, 'show_brand_home']);
+Route::get('/chi-tiet/{product_slug}',[ProductController::class, 'details_product']);
 
 
 //Backend
@@ -64,6 +66,16 @@ Route::get('/all-product',[ProductController::class, 'all_product']);
 Route::get('/unactive-product/{product_id}',[ProductController::class, 'unactive_product']);
 Route::get('/active-product/{product_id}',[ProductController::class, 'active_product']);
 Route::post('/save-product',[ProductController::class, 'save_product']);
+
+//Cart 
+// Route::post('/save-cart',[CartController::class, 'save_cart']);
+Route::post('/add-cart-ajax',[CartController::class, 'add_cart_ajax']);
+Route::get('/gio-hang',[CartController::class, 'gio_hang']);
+Route::post('/update-cart',[CartController::class, 'update_cart']);
+Route::get('/del-product/{session_id}',[CartController::class, 'delete_product']);
+Route::get('/del-all-product',[CartController::class, 'delete_all_product']);
+
+
 
 
 
