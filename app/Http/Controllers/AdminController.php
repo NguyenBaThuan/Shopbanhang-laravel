@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Redirect;
+use App\Models\Login;
 session_start();
 class AdminController extends Controller
 {
@@ -27,18 +28,20 @@ class AdminController extends Controller
         return view('admin.dashboard');
     }
     public function dashboard(Request $request){
-        $admin_email = $request->admin_email;
-        $admin_password = md5($request->admin_password);
-
-        $result = DB::table('tbl_admin')->where('admin_email',$admin_email)->where('admin_password',$admin_password)->first();
-        if($result){
-            Session::put('admin_name',$result->admin_name);
-            Session::put('admin_id',$result->admin_id);
-           return Redirect::to('/dashboard');
-        }
-        else{
-            Session::put('message','Mật khẩu hoặc tài khoản không đúng.Vui lòng nhập lại');
-            return Redirect::to('/admin');
+        $data = $request->all();
+        $admin_email = $data['admin_email'];
+        $admin_password = md5($data['admin_password']);
+        $login = Login::where('admin_email',$admin_email)->where('admin_password',$admin_password)->first();
+        if($login){
+            $login_count = $login->count();
+            if($login_count>0){
+                Session::put('admin_name',$login->admin_name);
+                Session::put('admin_id',$login->admin_id);
+                return Redirect::to('/dashboard');
+            }
+        }else{
+                Session::put('message','Mật khẩu hoặc tài khoản bị sai.Làm ơn nhập lại');
+                return Redirect::to('/admin');
         }
         
     }

@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 use App\Models\CategoryProductModel;
 use App\Models\BrandModel;
 use App\Models\ProductModel;
+use Illuminate\Support\Facades\Mail;
 
 class HomeController extends Controller
 {
@@ -43,5 +44,22 @@ class HomeController extends Controller
 
         return view('pages.product.search', compact('cate_product','brand_product','search_product'));
         
+    }
+    
+    public function send_mail(){
+         //send mail
+         $to_name = "Thuan Nguyen Shop";
+         $to_email = "nguyenbathuan1998@gmailcom";//send to this email
+        
+      
+         $data = array("name"=>"Mail từ tài khoản Khách hàng","body"=>'Mail gửi về vấn về hàng hóa'); //body of mail.blade.php
+         
+         Mail::send('pages.send_mail',$data,function($message) use ($to_name,$to_email){
+
+             $message->to($to_email)->subject('Test thử gửi mail google');//send this mail with subject
+             $message->from($to_email,$to_name);//send from this mail
+         });
+        //  return redirect('/trang-chu')->with('message','');
+         //--send mail
     }
 }

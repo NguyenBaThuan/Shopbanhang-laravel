@@ -54,6 +54,8 @@
                 <div class="clearfix"></div>
                 <input type="submit" value="Đăng nhập">
             </form>
+            <a href="{{url('/login-facebook')}}">Login Facebook</a>||
+            <a href="{{url('/login-google')}}">Login Google</a>
             <p>Chưa có tài khoản ?<a href="registration.html">Tạo tài khoản</a></p>
         </div>
     </div>

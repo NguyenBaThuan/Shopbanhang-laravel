@@ -29,5 +29,17 @@ return [
         'secret' => env('AWS_SECRET_ACCESS_KEY'),
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
+    'facebook' => [
+        'client_id' => '2885020805072226',  //client face của bạn
+        'client_secret' => 'fbae94612ea8580b2ba941742169bf4e',  //client app service face của bạn
+        'redirect' => 'http://localhost/shopbanhang/admin/callback' //callback trả về
+    ],
+    'google' => [
+        'client_id' => '205505125041-dv0bh8sc2d2jq3p1jl679vakqga9lo29.apps.googleusercontent.com',
+        'client_secret' => 'sQu05rkn1SEBYi6g3SNygIUa',
+        'redirect' => 'http://localhost/shopbanhang/google/callback'
+    ],
+
+
 
 ];

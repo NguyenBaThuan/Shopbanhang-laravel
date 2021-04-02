@@ -7,6 +7,7 @@ use App\Http\Controllers\CategoryProduct;
 use App\Http\Controllers\BrandProduct;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\LoginController;
 
 /*
 |--------------------------------------------------------------------------
@@ -74,6 +75,16 @@ Route::get('/gio-hang',[CartController::class, 'gio_hang']);
 Route::post('/update-cart',[CartController::class, 'update_cart']);
 Route::get('/del-product/{session_id}',[CartController::class, 'delete_product']);
 Route::get('/del-all-product',[CartController::class, 'delete_all_product']);
+
+//Send Mail 
+Route::get('/send-mail',[HomeController::class, 'send_mail']);
+
+// Login Facebook
+Route::get('/login-facebook',[LoginController::class ,'login_facebook']);
+Route::get('/admin/callback',[LoginController::class ,'callback_facebook']);
+Route::get('/login-google',[LoginController::class ,'login_google']);
+Route::get('/google/callback',[LoginController::class ,'callback_google']);
+
 
 
 
