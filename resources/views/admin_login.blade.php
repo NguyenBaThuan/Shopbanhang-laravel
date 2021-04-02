@@ -47,12 +47,23 @@
              ?>
             <form action="{{url('/admin-dashboard')}}" method="post">
                 {{ csrf_field() }}
-                <input type="text" class="ggg" name="admin_email" placeholder="Nhập email" required="">
-                <input type="password" class="ggg" name="admin_password" placeholder="Nhập password" required="">
+                @foreach($errors->all() as $error)
+                    {{$error}}
+                @endforeach
+                <input type="text" class="ggg" name="admin_email" placeholder="Nhập email">
+                <input type="password" class="ggg" name="admin_password" placeholder="Nhập password">
                 <span><input type="checkbox" />Nhớ mật khẩu</span>
                 <h6><a href="#">Quên mật khẩu?</a></h6>
                 <div class="clearfix"></div>
                 <input type="submit" value="Đăng nhập">
+                <div class="g-recaptcha" data-sitekey="{{env('CAPTCHA_KEY')}}"></div>
+                <br/>
+                @if($errors->has('g-recaptcha-response'))
+                <span class="invalid-feedback" style="display:block">
+                    <strong>{{$errors->first('g-recaptcha-response')}}</strong>
+                </span>
+                @endif
+
             </form>
             <a href="{{url('/login-facebook')}}">Login Facebook</a>||
             <a href="{{url('/login-google')}}">Login Google</a>
@@ -65,6 +76,7 @@
     <script src="public/backend/js/jquery.slimscroll.js"></script>
     <script src="public/backend/js/jquery.nicescroll.js"></script>
     <!--[if lte IE 8]><script language="javascript" type="text/javascript" src="public/backend/js/flot-chart/excanvas.min.js"></script><![endif]-->
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
     <script src="public/backend/js/jquery.scrollTo.js"></script>
 </body>
 

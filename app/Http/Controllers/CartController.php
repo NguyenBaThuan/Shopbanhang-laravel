@@ -9,10 +9,46 @@ use Illuminate\Support\Facades\Redirect;
 use App\Models\ProductModel;
 use App\Models\BrandModel;
 use App\Models\CategoryProductModel;
+use App\Models\Coupon;
 session_start();
 
 class CartController extends Controller
 {
+    public function check_coupon(Request $request){
+        $data = $request->all();
+        $coupon = Coupon::where('coupon_code',$data['coupon'])->first();
+        if($coupon){
+            $count_coupon = $coupon->count();
+            if($count_coupon){
+                $coupon_session = Session::get('coupon_session');
+                if($coupon_session){
+                    $is_avaiable =0;
+                    if($is_avaiable==0){
+                        $cou[]= array(
+                            'coupon_code' => $coupon->coupon_code,
+                            'coupon_condition' => $coupon->coupon_condition,
+                            'coupon_number' => $coupon->coupon_number,
+
+                        );
+                        Session::put('coupon',$cou);
+                    }
+                }else{
+                    $cou[]= array(
+                        'coupon_code' => $coupon->coupon_code,
+                        'coupon_condition' => $coupon->coupon_condition,
+                        'coupon_number' => $coupon->coupon_number,
+
+                    );
+                    Session::put('coupon',$cou);
+                }
+                Session::save();
+                return redirect()->back()->with('message','Thêm mã giảm giá thành công');
+            }
+        }else{
+            return redirect()->back()->with('error','Mã giảm giá không đúng');
+        }
+    }
+
     public function add_cart_ajax(Request $request){
         // Session::forget('cart');
         $data = $request->all();

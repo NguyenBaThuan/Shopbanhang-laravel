@@ -277,6 +277,30 @@
                                 <span>Tổng quan</span>
                             </a>
                         </li>
+                        {{-- Mã giảm giá --}}
+                        <li class="sub-menu">
+                            <a href="javascript:;">
+                                <i class="fa fa-book"></i>
+                                <span>Mã giảm giá</span>
+                            </a>
+                            <ul class="sub">
+                                <li><a href="{{URL::to('/insert-coupon')}}">Quản lý mã giảm giá</a></li>
+                                <li><a href="{{URL::to('/list-coupon')}}">Liệt kê mã giảm giá</a></li>
+                            </ul>
+                        </li>
+                        {{-- Vận chuyển --}}
+                        <li class="sub-menu">
+                            <a href="javascript:;">
+                                <i class="fa fa-book"></i>
+                                <span>Vận chuyển</span>
+                            </a>
+                            <ul class="sub">
+                                <li><a href="{{URL::to('/delivery')}}">Quản lý vận chuyển</a></li>
+                                
+                                
+                              
+                            </ul>
+                        </li>
                         {{-- Danh mục sản phẩm --}}
                         <li class="sub-menu">
                             <a href="javascript:;">
@@ -342,6 +366,85 @@
     <!--[if lte IE 8]><script language="javascript" type="text/javascript" src="public/backend/js/flot-chart/excanvas.min.js"></script><![endif]-->
     <script src="{{asset('public/backend/js/jquery.scrollTo.js')}}"></script>
     <script src="{{asset('public/backend/ckeditor/ckeditor.js')}}"></script>
+    {{-- Tính phí vận chuyển Ajax --}}
+
+    <script type="text/javascript">
+        $(document).ready(function(){
+            fetch_delivery();
+            function fetch_delivery(){
+               var _token = $('input[name="_token"]').val();
+               $.ajax({
+                    url : '{{url('/select-feeship')}}',
+                    method:'POST',
+                    data:{_token:_token},
+                    success:function(data){
+                        $('#load_delivery').html(data);
+                    }
+                });
+            }
+            $(document).on('blur','.fee_ship_edit',function(){
+                var feeship_id = $(this).data('feeship_id');
+                var fee_value = $(this).text();
+                var _token = $('input[name="_token"]').val();
+                $.ajax({
+                    url : '{{url('/update-delivery')}}',
+                    method:'POST',
+                    data:{feeship_id:feeship_id,fee_value:fee_value,_token:_token},
+                    success:function(data){
+                        fetch_delivery();
+                    }
+                });
+             
+            });
+
+            $('.add_delivery').click(function(){
+                var city = $('.city').val();
+                var province = $('.province').val();
+                var wards = $('.wards').val();
+                var fee_ship = $('.fee_ship').val();
+                var _token = $('input[name="_token"]').val();
+                // alert(city);
+                // alert(province);
+                // alert(wards);
+                // alert(fee_ship);
+                $.ajax({
+                    url : '{{url('/insert-delivery')}}',
+                    method:'POST',
+                    data:{city:city,province:province,wards:wards,fee_ship:fee_ship,_token:_token},
+                    success:function(data){
+                        fetch_delivery();
+                    }
+                });
+
+            });
+            $('.choose').change(function(){
+                var action = $(this).attr('id');
+                var ma_id = $(this).val();
+                var _token = $('input[name="_token"]').val();
+                var result = ''; 
+                // alert(action);
+                // alert(ma_id);
+                // alert(_token);
+
+                
+                if(action=='city'){
+                    result = 'province';
+                }else{
+                    result = 'wards';
+                }  
+                $.ajax({
+                    url : '{{url('/select-delivery')}}',
+                    method:'POST',
+                    data:{action:action,ma_id:ma_id,_token:_token},
+                    success:function(data){
+                        $('#'+result).html(data);
+                    }
+                });
+            });
+        })
+    </script>
+
+
     <script type="text/javascript">
         CKEDITOR.replace('ckeditor');
         CKEDITOR.replace('ckeditor1');
@@ -352,6 +455,8 @@
 
         });
     </script>
+
+
 
 
 

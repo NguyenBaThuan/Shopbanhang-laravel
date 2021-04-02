@@ -6,8 +6,11 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Validator;
 use App\Models\Login;
+use App\Rules\Captcha; 
 session_start();
+
 class AdminController extends Controller
 {
     public function AuthLogin(){
@@ -28,7 +31,13 @@ class AdminController extends Controller
         return view('admin.dashboard');
     }
     public function dashboard(Request $request){
-        $data = $request->all();
+
+        // $data = $request->all();
+        $data = $request->validate([
+            'admin_email' => 'required',
+            'admin_password' => 'required',
+            'g-recaptcha-response' => new Captcha(),	
+        ]);
         $admin_email = $data['admin_email'];
         $admin_password = md5($data['admin_password']);
         $login = Login::where('admin_email',$admin_email)->where('admin_password',$admin_password)->first();
@@ -52,4 +61,6 @@ class AdminController extends Controller
         Session::put('admin_id',null);
         return Redirect::to('/admin');
     }
+
+
 }

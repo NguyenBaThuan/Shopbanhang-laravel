@@ -34,8 +34,7 @@
 
 @extends('layout')
 @section('content')
-<div class="features_items"><!--features_items-->
-       
+<div class="features_items clearfix"><!--features_items-->
                         <h2 class="title text-center">Sản phẩm mới nhất</h2>
                         
                         @foreach($all_product as $key => $product)
@@ -55,7 +54,7 @@
                                             <input type="hidden" value="{{$product->product_price}}" class="cart_product_price_{{$product->product_id}}">
                                             <input type="hidden" value="1" class="cart_product_qty_{{$product->product_id}}">
 
-                                            <a href="{{url('/chi-tiet-san-pham/'.$product->product_slug)}}">
+                                            <a href="{{url('/chi-tiet/'.$product->product_slug)}}">
                                                 <img src="{{url('public/uploads/product/'.$product->product_image)}}" alt="" />
                                                 <h2>{{number_format($product->product_price,0,',','.').' '.'VNĐ'}}</h2>
                                                 <p>{{$product->product_name}}</p>

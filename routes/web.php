@@ -8,6 +8,8 @@ use App\Http\Controllers\BrandProduct;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\CouponController;
+use App\Http\Controllers\DeliveryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -76,8 +78,23 @@ Route::post('/update-cart',[CartController::class, 'update_cart']);
 Route::get('/del-product/{session_id}',[CartController::class, 'delete_product']);
 Route::get('/del-all-product',[CartController::class, 'delete_all_product']);
 
+//Coupon
+Route::post('/check-coupon',[CartController::class, 'check_coupon']);
+Route::get('/insert-coupon',[CouponController::class, 'insert_coupon']);
+Route::get('/list-coupon',[CouponController::class, 'list_coupon']);
+Route::get('/unset-coupon',[CouponController::class, 'unset_coupon']);
+Route::get('/delete-coupon/{coupon_id}',[CouponController::class, 'delete_coupon']);
+Route::post('/insert-coupon-code',[CouponController::class, 'insert_coupon_code']);
+
+//Delivery
+Route::get('/delivery',[DeliveryController::class, 'delivery']);
+Route::post('/select-delivery',[DeliveryController::class, 'select_delivery']);
+Route::post('/insert-delivery',[DeliveryController::class, 'insert_delivery']);
+Route::post('/select-feeship',[DeliveryController::class, 'select_feeship']);
+Route::post('/update-delivery',[DeliveryController::class, 'update_delivery']);
+
 //Send Mail 
-Route::get('/send-mail',[HomeController::class, 'send_mail']);
+Route::get('/send-mail',[HomeController::class, 'send_mail']);      
 
 // Login Facebook
 Route::get('/login-facebook',[LoginController::class ,'login_facebook']);

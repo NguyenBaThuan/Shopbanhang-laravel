@@ -865,10 +865,26 @@ h2.title {
 }
 
 .productinfo p {
-    font-family: 'Roboto', sans-serif;
+    /* font-family: 'Roboto', sans-serif;
     font-size: 14px;
     font-weight: 400;
     color: #696763;
+    height: 50px;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    text-overflow: ellipsis; */
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 18px;
+    height: 36px;
+    color: #696763;
+    /* margin: 10px 10px 4px; */
+    overflow: hidden;
+    display: block;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    text-overflow: ellipsis;
 }
 
 .productinfo img {
@@ -1542,7 +1558,7 @@ h2.title {
 
 #cart_items .cart_info {
     border: 1px solid #E6E4DF;
-    margin-bottom: 50px
+    margin-bottom: 50px;
 }
 
 #cart_items .cart_info .cart_menu {

@@ -250,6 +250,7 @@
 	</section><!--/slider-->
 	
 	<section>
+
 		<div class="container">
 			<div class="row">
 				<div class="col-sm-3">
@@ -282,7 +283,7 @@
 				</div>
 				
 				<div class="col-sm-9 padding-right">
-					@yield('content')
+						@yield('content')
 				</div>
 			</div>
 		</div>
@@ -446,6 +447,11 @@
 		
 	</footer><!--/Footer-->
 	
+	<script type="text/javascript">
+		window.onbeforeunload = function() {
+            return "you can not refresh the page";
+        }
+	</script>
 
   
     <script src="{{asset('public/frontend/js/jquery.js')}}"></script>
@@ -455,8 +461,11 @@
     <script src="{{asset('public/frontend/js/jquery.prettyPhoto.js')}}"></script>
     <script src="{{asset('public/frontend/js/main.js')}}"></script>
 	<script src="{{asset('public/frontend/js/sweetalert.js')}}"></script>
+	<script src="https://www.google.com/recaptcha/api.js" async defer></script>  
 	<div id="fb-root"></div>
-<script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v10.0" nonce="qWbLQzWA"></script>
+	<script async defer crossorigin="anonymous" 
+	src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v10.0" 
+	nonce="qWbLQzWA"></script>
 
 
 
