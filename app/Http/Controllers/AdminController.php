@@ -9,12 +9,13 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
 use App\Models\Login;
 use App\Rules\Captcha; 
+use Illuminate\Support\Facades\Auth;
 session_start();
 
 class AdminController extends Controller
 {
     public function AuthLogin(){
-        $admin_id = Session::get('admin_id');
+        $admin_id = Auth::id();
         if($admin_id){
             return Redirect::to('admin.dashboard');
         }

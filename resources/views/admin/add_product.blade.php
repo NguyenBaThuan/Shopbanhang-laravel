@@ -22,6 +22,14 @@
                             <input data-validation="length" data-validation-length="min3" data-validation-err-message="Tên sản phẩm ít nhất 3 kí tự" type="text" name="product_name" class="form-control" id="exampleInputEmail1" placeholder="Tên sản phẩm">
                         </div>
                         <div class="form-group">
+                            <label for="exampleInputEmail1">SL sản phẩm</label>
+                            <input type="text" data-validation="number" data-validation-error-msg="Làm ơn điền số lượng" name="product_quantity" class="form-control" id="exampleInputEmail1" placeholder="Điền số lượng">
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Slug</label>
+                            <input type="text" name="product_slug" class="form-control " id="convert_slug" placeholder="Tên danh mục">
+                        </div>
+                        <div class="form-group">
                             <label for="exampleInputEmail1">Giá sản phẩm</label>
                             <input type="text" name="product_price" class="form-control" id="exampleInputEmail1" placeholder="Tên sản phẩm">
                         </div>

@@ -103,7 +103,7 @@
         </div>
         <div class="col-sm-7 text-right text-center-xs">                
           <ul class="pagination pagination-sm m-t-none m-b-none">
-             {{-- {!!$coupon->links()!!} --}}
+            {{ $coupon->links() }}
           </ul>
         </div>
       </div>

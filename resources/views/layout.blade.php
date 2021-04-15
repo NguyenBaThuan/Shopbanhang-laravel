@@ -4,12 +4,12 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!---------Seo--------->
-    {{-- <meta name="description" content="{{$meta_desc}}">
+    <meta name="description" content="{{$meta_desc}}">
     <meta name="keywords" content="{{$meta_keywords}}"/>
     <meta name="robots" content="INDEX,FOLLOW"/>
     <link  rel="canonical" href="{{$url_canonical}}" />
     <meta name="author" content="">
-    <link  rel="icon" type="image/x-icon" href="" /> --}}
+    <link  rel="icon" type="image/x-icon" href="" />
     
       {{-- <meta property="og:image" content="{{$image_og}}" />  
       <meta property="og:site_name" content="http://localhost/shopbanhang" />
@@ -194,45 +194,27 @@
 							<li data-target="#slider-carousel" data-slide-to="1"></li>
 							<li data-target="#slider-carousel" data-slide-to="2"></li>
 						</ol>
+						<style type="text/css">
+                            img.img.img-responsive.img-slider {
+                                height: 300px;
+                            }
+                        </style>
 						
 						<div class="carousel-inner">
-							<div class="item active">
-								<div class="col-sm-6">
-									<h1><span>E</span>-SHOPPER</h1>
-									<h2>Free E-Commerce Template</h2>
-									<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </p>
-									<button type="button" class="btn btn-default get">Get it now</button>
-								</div>
-								<div class="col-sm-6">
-									<img src="{{asset('public/frontend/images/girl1.jpg')}}" class="girl img-responsive" alt="" />
-									<img src="{{asset('public/frontend/images/pricing.png')}}"  class="pricing" alt="" />
-								</div>
-							</div>
-							<div class="item">
-								<div class="col-sm-6">
-									<h1><span>E</span>-SHOPPER</h1>
-									<h2>100% Responsive Design</h2>
-									<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </p>
-									<button type="button" class="btn btn-default get">Get it now</button>
-								</div>
-								<div class="col-sm-6">
-									<img src="{{asset('public/frontend/images/girl2.jpg')}}" class="girl img-responsive" alt="" />
-									<img src="{{asset('public/frontend/images/pricing.png')}}"class="pricing" alt="" />
+							@php
+								$i = 0;
+							@endphp
+							@foreach ($slider as $key => $slide)
+							@php
+								$i++;
+							@endphp
+							<div class="item {{$i ==1 ? 'active' :''}}">
+
+								<div class="col-sm-12">
+									<img alt="{{$slide->slide_desc}}" src="{{url('public/uploads/slider/'.$slide->slider_image)}}" width="100%" class="img img-responsive img-slider">
 								</div>
 							</div>
-							
-							<div class="item">
-								<div class="col-sm-6">
-									<h1><span>E</span>-SHOPPER</h1>
-									<h2>Free Ecommerce Template</h2>
-									<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </p>
-									<button type="button" class="btn btn-default get">Get it now</button>
-								</div>
-								<div class="col-sm-6">
-									<img src="{{asset('public/frontend/images/girl3.jpg"')}}" class="girl img-responsive" alt="" />
-									<img src="{{asset('public/frontend/images/pricing.png')}}" class="pricing" alt="" />
-								</div>
-							</div>
+							@endforeach
 							
 						</div>
 						
@@ -447,11 +429,7 @@
 		
 	</footer><!--/Footer-->
 	
-	<script type="text/javascript">
-		window.onbeforeunload = function() {
-            return "you can not refresh the page";
-        }
-	</script>
+	
 
   
     <script src="{{asset('public/frontend/js/jquery.js')}}"></script>
@@ -514,8 +492,108 @@
                 
             });
         });
-
-
 	</script>
+	<script type="text/javascript">
+        $(document).ready(function(){
+            $('.choose').on('change',function(){
+            var action = $(this).attr('id');
+            var ma_id = $(this).val();
+            var _token = $('input[name="_token"]').val();
+            var result = '';
+           
+            if(action=='city'){
+                result = 'province';
+            }else{
+                result = 'wards';
+            }
+            $.ajax({
+                url : '{{url('/select-delivery-home')}}',
+                method: 'POST',
+                data:{action:action,ma_id:ma_id,_token:_token},
+                success:function(data){
+                   $('#'+result).html(data);     
+                }
+            });
+        });
+        });
+          
+    </script>
+
+<script type="text/javascript">
+	$(document).ready(function(){
+		$('.calculate_delivery').click(function(){
+			var matp = $('.city').val();
+			var maqh = $('.province').val();
+			var xaid = $('.wards').val();
+			var _token = $('input[name="_token"]').val();
+			if(matp == '' && maqh =='' && xaid ==''){
+				alert('Làm ơn chọn để tính phí vận chuyển');
+			}else{
+				$.ajax({
+				url : '{{url('/calculate-fee')}}',
+				method: 'POST',
+				data:{matp:matp,maqh:maqh,xaid:xaid,_token:_token},
+				success:function(){
+				   location.reload(); 
+				}
+				});
+			} 
+		});
+	});
+</script>
+
+<script type="text/javascript">
+	$(document).ready(function(){
+	   $('.send_order').click(function(){
+		swal({
+                  title: "Xác nhận đơn hàng",
+                  text: "Đơn hàng sẽ không được hoàn trả khi đặt,bạn có muốn đặt không?",
+                  type: "warning",
+                  showCancelButton: true,
+                  confirmButtonClass: "btn-danger",
+                  confirmButtonText: "Cảm ơn, Mua hàng",
+
+                    cancelButtonText: "Đóng,chưa mua",
+                    closeOnConfirm: false,
+                    closeOnCancel: false
+                },
+				function(isConfirm){
+					if(isConfirm){
+						var shipping_email = $('.shipping_email').val();
+						var shipping_name = $('.shipping_name').val();
+						var shipping_address = $('.shipping_address').val();
+						var shipping_phone = $('.shipping_phone').val();
+						var shipping_notes = $('.shipping_notes').val();
+						var shipping_method = $('.payment_select').val();
+						var order_fee = $('.order_fee').val();
+						var order_coupon = $('.order_coupon').val();
+						var _token = $('input[name="_token"]').val();
+
+							$.ajax({
+								url: '{{url('/confirm-order')}}',
+								method: 'POST',
+								data:{shipping_email:shipping_email,shipping_name:shipping_name,shipping_address:
+									shipping_address,shipping_phone:shipping_phone,shipping_notes:
+									shipping_notes,order_fee:order_fee,order_coupon:
+									order_coupon,shipping_method:shipping_method,_token:_token},
+								success:function(){
+
+									swal("Đơn hàng", "Đơn hàng của bạn đã được gửi thành công", "success");
+
+								}
+
+							});
+							window.setTimeout(function(){ 
+                            location.reload();
+                        	} ,3000);
+					}
+					else{
+						swal("Đóng", "Đơn hàng chưa được gửi, làm ơn hoàn tất đơn hàng", "error");
+					}
+				});
+	   });
+   });
+</script>
+
 </body>
 </html>

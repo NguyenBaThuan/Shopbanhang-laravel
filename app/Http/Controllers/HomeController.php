@@ -8,11 +8,15 @@ use Illuminate\Support\Facades\DB;
 use App\Models\CategoryProductModel;
 use App\Models\BrandModel;
 use App\Models\ProductModel;
+use App\Models\Slider;
 use Illuminate\Support\Facades\Mail;
 
 class HomeController extends Controller
 {
     public function index(Request $request){
+        // slider
+        $slider = Slider::orderby('slider_id','desc')->where('slider_status',1)->take(4)->get();
+
         //seo 
         $meta_desc = "Chuyên bán những phụ kiện ,thiết bị game"; 
         $meta_keywords = "thiet bi game,phu kien game,game phu kien,game giai tri";
@@ -30,19 +34,28 @@ class HomeController extends Controller
         // ->orderby('product_id','desc')
         // ->get();
         $all_product = DB::table('tbl_product')->where('product_status','1')->orderby(DB::raw('RAND()'))->paginate(6); 
-        return view('pages.home',compact('cate_product','brand_product','all_product','meta_desc','meta_keywords','meta_title','url_canonical'));
+        return view('pages.home',compact('cate_product','brand_product','all_product','meta_desc','meta_keywords','meta_title','url_canonical','slider'));
     }
 
     public function search(Request $request){
+
+        //seo 
+        $meta_desc = "Tìm kiếm sản phẩm"; 
+        $meta_keywords = "Tìm kiếm sản phẩm";
+        $meta_title = "Tìm kiếm sản phẩm";
+        $url_canonical = $request->url();
+        //--seo
         $keywords = $request->keywords_submit;
+        $slider = Slider::orderBy('slider_id','DESC')->where('slider_status','1')->take(4)->get();
         $cate_product = CategoryProductModel::where('category_status',1)->orderby('category_id','desc')->get();
         $brand_product = BrandModel::where('brand_status',1)->orderby('brand_id','desc')->get();
         $search_product = DB::table('tbl_product')->where('product_name','like','%'.$keywords.'%')->get(); 
         // echo '<pre>';
         // print_r($search_product);
         // echo '</pre>';
+     
 
-        return view('pages.product.search', compact('cate_product','brand_product','search_product'));
+        return view('pages.product.search', compact('cate_product','brand_product','search_product','meta_desc','meta_keywords','meta_title','url_canonical','slider'));
         
     }
     

@@ -10,6 +10,11 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\CouponController;
 use App\Http\Controllers\DeliveryController;
+use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\OrderController;
+use App\Http\Controllers\SliderController;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -102,6 +107,47 @@ Route::get('/admin/callback',[LoginController::class ,'callback_facebook']);
 Route::get('/login-google',[LoginController::class ,'login_google']);
 Route::get('/google/callback',[LoginController::class ,'callback_google']);
 
+// Check out
+Route::get('/dang-nhap',[CheckoutController::class , 'login_checkout']);
+Route::get('/del-fee',[CheckoutController::class, 'del_fee']);
+
+Route::get('/logout-checkout',[CheckoutController::class, 'logout_checkout']);
+Route::post('/add-customer',[CheckoutController::class, 'add_customer']);
+Route::post('/order-place',[CheckoutController::class, 'order_place']);
+Route::post('/login-customer',[CheckoutController::class, 'login_customer']);
+Route::get('/checkout',[CheckoutController::class, 'checkout']);
+Route::get('/payment',[CheckoutController::class, 'payment']);
+Route::post('/save-checkout-customer',[CheckoutController::class, 'save_checkout_customer']);
+Route::post('/calculate-fee',[CheckoutController::class, 'calculate_fee']);
+Route::post('/select-delivery-home',[CheckoutController::class, 'select_delivery_home']);
+Route::post('/confirm-order',[CheckoutController::class, 'confirm_order']);
+
+// Order
+Route::get('/manage-order',[OrderController::class, 'manage_order']);
+Route::get('/view-order/{order_code}',[OrderController::class, 'view_order']);
+Route::get('/print-order/{checkout_code}',[OrderController::class, 'print_order']);
+Route::post('/update-order-qty',[OrderController::class, 'update_order_qty']);
+Route::post('/update-qty',[OrderController::class, 'update_qty']);
+// Banner 
+Route::get('/manage-slider',[SliderController::class, 'manage_slider']);
+Route::get('/add-slider',[SliderController::class, 'add_slider']);
+Route::get('/delete-slide/{slide_id}',[SliderController::class, 'delete_slider']);
+Route::post('/insert-slider',[SliderController::class, 'insert_slider']);
+Route::get('/unactive-slide/{slide_id}',[SliderController::class, 'unactive_slide']);
+Route::get('/active-slide/{slide_id}',[SliderController::class, 'active_slide']);
+
+// Authentication roles
+Route::get('/register-auth',[AuthController::class, 'register_auth']);
+Route::post('/register',[AuthController::class, 'register']);
+Route::get('/login-auth',[AuthController::class, 'login_auth']);
+Route::get('/logout-auth',[AuthController::class, 'logout_auth']);
+Route::post('/login',[AuthController::class, 'login']);
+
+// Users
+Route::get('/users',[UserController::class, 'index']);
+Route::get('/add-users',[UserController::class, 'add_users']);
+Route::post('/store-users',[UserController::class, 'store_users']);
+Route::post('/ assign-roles',[UserController::class, 'assign_roles']);
 
 
 

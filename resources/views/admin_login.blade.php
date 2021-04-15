@@ -66,8 +66,10 @@
 
             </form>
             <a href="{{url('/login-facebook')}}">Login Facebook</a>||
-            <a href="{{url('/login-google')}}">Login Google</a>
-            <p>Chưa có tài khoản ?<a href="registration.html">Tạo tài khoản</a></p>
+            <a href="{{url('/login-google')}}">Login Google</a> ||
+            <a href="{{url('/register-auth')}}">Đăng ký Auth</a> ||
+            <a href="{{url('/login-auth')}}">Đăng nhập Auth</a> 
+           
         </div>
     </div>
     <script src="public/backend/js/bootstrap.js"></script>
@@ -76,7 +78,7 @@
     <script src="public/backend/js/jquery.slimscroll.js"></script>
     <script src="public/backend/js/jquery.nicescroll.js"></script>
     <!--[if lte IE 8]><script language="javascript" type="text/javascript" src="public/backend/js/flot-chart/excanvas.min.js"></script><![endif]-->
-    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    {{-- <script src="https://www.google.com/recaptcha/api.js" async defer></script> --}}
     <script src="public/backend/js/jquery.scrollTo.js"></script>
 </body>
 

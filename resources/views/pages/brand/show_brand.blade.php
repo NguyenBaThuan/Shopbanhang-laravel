@@ -50,7 +50,7 @@
                         @endforeach
                     </div><!--features_items-->
                       <ul class="pagination pagination-sm m-t-none m-b-none">
-                       {{-- {!!$brand_by_id->links()!!} --}}
+                       {!!$brand_by_id->links()!!}
                       </ul>
 
         <!--/recommended_items-->

@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Redirect;
 use App\Models\CategoryProductModel;
 use App\Models\BrandModel;
+use App\Models\Slider;
 
 
 session_start();
@@ -30,7 +31,7 @@ class CategoryProduct extends Controller
 
     public function all_category_product(){
         $this->AuthLogin();
-        $all_category_product = CategoryProductModel::get();
+        $all_category_product = CategoryProductModel::paginate(5);
         return view('admin.all_category_product',compact('all_category_product'));
     }
 
@@ -91,6 +92,7 @@ class CategoryProduct extends Controller
 
     // End function admin pages
     public function show_category_home(Request $request ,$slug_category_product){
+        $slider = Slider::orderby('slider_id','desc')->where('slider_status',1)->take(4)->get();
         $cate_product = CategoryProductModel::where('category_status',1)->orderby('category_id','desc')->get();
         $brand_product = BrandModel::where('brand_status',1)->orderby('brand_id','desc')->get();  
         $category_by_id = DB::table('tbl_product')->join('tbl_category_product','tbl_product.category_id','=','tbl_category_product.category_id')->where('tbl_category_product.slug_category_product',$slug_category_product)->paginate(6);
@@ -103,7 +105,7 @@ class CategoryProduct extends Controller
             $url_canonical = $request->url();
             //--seo
             }
-        return view('pages.category.show_category',compact('brand_product','cate_product','category_by_id','category_name','meta_desc','meta_keywords','meta_title','url_canonical'));
+        return view('pages.category.show_category',compact('brand_product','cate_product','category_by_id','category_name','meta_desc','meta_keywords','meta_title','url_canonical','slider'));
        
     }
 

@@ -27,7 +27,7 @@ class CouponController extends Controller
     }
 
     public function list_coupon(){
-        $coupon = Coupon::orderby('coupon_id','desc')->get();
+        $coupon = Coupon::orderby('coupon_id','desc')->paginate(5);
         return view('admin.coupon.list_coupon',compact('coupon'));
     }
 

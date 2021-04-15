@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Redirect;
 use App\Models\ProductModel;
 use App\Models\BrandModel;
+use App\Models\Slider;
 use App\Models\CategoryProductModel;
 session_start();
 
@@ -36,7 +37,7 @@ class ProductController extends Controller
         ->join('tbl_brand','tbl_brand.brand_id','=','tbl_product.brand_id')
         ->select('tbl_product.*','tbl_category_product.category_name','tbl_brand.brand_name')
         ->orderby('product_id','desc')
-        ->get();
+        ->paginate(5);
         return view('admin.all_product',compact('all_product'));
     }
 
@@ -44,11 +45,13 @@ class ProductController extends Controller
         $this->AuthLogin();
         $data =array();
         $data['product_name'] = $request->product_name;
+        $data['product_quantity'] = $request->product_quantity;
         $data['product_price'] = $request->product_price;
         $data['product_desc'] = $request->product_desc;
         $data['product_content'] = $request->product_content;
         $data['category_id'] = $request->category_product;
         $data['brand_id'] = $request->brand_product;
+        $data['product_slug'] = $request->product_slug;
         $data['product_status'] = $request->product_status;
         $get_image = $request->file('product_image');
             if($get_image){
@@ -94,6 +97,8 @@ class ProductController extends Controller
         $this->AuthLogin();
         $data =array();
         $data['product_name'] = $request->product_name;
+        $data['product_quantity'] = $request->product_quantity;
+        $data['product_slug'] = $request->product_slug;
         $data['product_price'] = $request->product_price;
         $data['product_desc'] = $request->product_desc;
         $data['product_content'] = $request->product_content;
@@ -127,6 +132,7 @@ class ProductController extends Controller
 
     // End function admin pages
     public function details_product($product_slug , Request $request){
+        $slider = Slider::orderby('slider_id','desc')->where('slider_status',1)->take(4)->get();
         $cate_product = CategoryProductModel::where('category_status',1)->orderby('category_id','desc')->get();
         $brand_product = BrandModel::where('brand_status',1)->orderby('brand_id','desc')->get();
         $product_details = DB::table('tbl_product')
@@ -135,14 +141,19 @@ class ProductController extends Controller
         ->where('tbl_product.product_slug',$product_slug)
         ->get();
 
-        foreach($product_details as $key => $value)
-        {
+        foreach($product_details as $key => $value){
             $category_id = $value->category_id;
-        }
+                //seo 
+                $meta_desc = $value->product_desc;
+                $meta_keywords = $value->product_slug;
+                $meta_title = $value->product_name;
+                $url_canonical = $request->url();
+                //--seo
+            }
         $related_product = DB::table('tbl_product')
         ->join('tbl_category_product','tbl_category_product.category_id','=','tbl_product.category_id')
         ->join('tbl_brand','tbl_brand.brand_id','=','tbl_product.brand_id')
         ->where('tbl_category_product.category_id',$category_id)->whereNotIn('tbl_product.product_slug',[$product_slug])->orderby(DB::raw('RAND()'))->paginate(3);
-        return view('pages.product.show_detail',compact('cate_product','brand_product','product_details','related_product'));
+        return view('pages.product.show_detail',compact('cate_product','brand_product','product_details','related_product','slider','meta_desc','meta_keywords','meta_title','url_canonical'));
     }
 }

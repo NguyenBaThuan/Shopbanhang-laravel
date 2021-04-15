@@ -43,6 +43,7 @@
                                 </label>
                             </th>
                             <th>Tên sản phẩm</th>
+                            <th>Số lượng</th>
                             <th>Giá</th>
                             <th>Hình ảnh</th>
                             <th>Danh mục</th>
@@ -56,6 +57,7 @@
                         <tr>
                             <td><label class="i-checks m-b-none"><input type="checkbox" name="post[]"><i></i></label></td>
                             <td>{{$product_value->product_name}}</td>
+                            <td>{{$product_value->product_quantity}}</td>
                             <td>{{$product_value->product_price}}</td>
                             <td><img src="public/uploads/product/{{$product_value->product_image}}" height="100px" width="100px"></td>
                             <td>{{$product_value->category_name}}</td>
@@ -76,7 +78,7 @@
                                     
                                 </span>
                             </td>
-                            <td><span class="text-ellipsis">26/3/2021</span></td>
+                            {{-- <td><span class="text-ellipsis">26/3/2021</span></td> --}}
                             <td>
                                 <a href="{{url('/edit-product/'.$product_value->product_id)}}" class="active styling-edit" ui-toggle-class="">
                                     <i class="fa fa-pencil-square-o text-success text-active"></i>
@@ -99,12 +101,7 @@
                     </div>
                     <div class="col-sm-7 text-right text-center-xs">
                         <ul class="pagination pagination-sm m-t-none m-b-none">
-                            <li><a href=""><i class="fa fa-chevron-left"></i></a></li>
-                            <li><a href="">1</a></li>
-                            <li><a href="">2</a></li>
-                            <li><a href="">3</a></li>
-                            <li><a href="">4</a></li>
-                            <li><a href=""><i class="fa fa-chevron-right"></i></a></li>
+                            {!!$all_product->links()!!}
                         </ul>
                     </div>
                 </div>

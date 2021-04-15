@@ -23,6 +23,14 @@
                             <input type="text" name="product_name" value="{{$edit_value->product_name}}" class="form-control" id="exampleInputEmail1">
                         </div>
                         <div class="form-group">
+                            <label for="exampleInputEmail1">SL sản phẩm</label>
+                            <input type="text" name="product_quantity" value="{{$edit_value->product_quantity}}" class="form-control" id="exampleInputEmail1">
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Slug</label>
+                            <input type="text" name="product_slug" class="form-control" id="exampleInputEmail1" value="{{$edit_value->product_slug}}">
+                        </div>
+                        <div class="form-group">
                             <label for="exampleInputEmail1">Giá sản phẩm</label>
                             <input type="text" name="product_price" value="{{$edit_value->product_price}}" class="form-control" id="exampleInputEmail1">
                         </div>

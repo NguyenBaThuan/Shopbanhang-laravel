@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Redirect;
 use App\Models\ProductModel;
 use App\Models\BrandModel;
-use App\Models\CategoryProductModel;
+use App\Models\Slider;
 use App\Models\Coupon;
 session_start();
 
@@ -103,8 +103,9 @@ class CartController extends Controller
        //--seo
        $cate_product = DB::table('tbl_category_product')->where('category_status','1')->orderby('category_id','desc')->get(); 
        $brand_product = DB::table('tbl_brand')->where('brand_status','1')->orderby('brand_id','desc')->get(); 
+       $slider = Slider::orderby('slider_id','desc')->where('slider_status',1)->take(4)->get();
 
-       return view('pages.cart.show_cart',compact('cate_product','brand_product','meta_desc','meta_keywords','meta_title','url_canonical'));
+       return view('pages.cart.show_cart',compact('cate_product','brand_product','meta_desc','meta_keywords','meta_title','url_canonical','slider'));
    }    
 
    public function update_cart(Request $request){
