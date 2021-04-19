@@ -9,6 +9,7 @@ use App\Models\CategoryProductModel;
 use App\Models\BrandModel;
 use App\Models\ProductModel;
 use App\Models\Slider;
+use App\Models\CatePost;
 use Illuminate\Support\Facades\Mail;
 
 class HomeController extends Controller
@@ -16,7 +17,7 @@ class HomeController extends Controller
     public function index(Request $request){
         // slider
         $slider = Slider::orderby('slider_id','desc')->where('slider_status',1)->take(4)->get();
-
+        $category_post = CatePost::orderBy('cate_post_id','DESC')->get();
         //seo 
         $meta_desc = "Chuyên bán những phụ kiện ,thiết bị game"; 
         $meta_keywords = "thiet bi game,phu kien game,game phu kien,game giai tri";
@@ -34,7 +35,7 @@ class HomeController extends Controller
         // ->orderby('product_id','desc')
         // ->get();
         $all_product = DB::table('tbl_product')->where('product_status','1')->orderby(DB::raw('RAND()'))->paginate(6); 
-        return view('pages.home',compact('cate_product','brand_product','all_product','meta_desc','meta_keywords','meta_title','url_canonical','slider'));
+        return view('pages.home',compact('cate_product','brand_product','all_product','meta_desc','meta_keywords','meta_title','url_canonical','slider','category_post'));
     }
 
     public function search(Request $request){

@@ -10,6 +10,7 @@ use App\Models\ProductModel;
 use App\Models\BrandModel;
 use App\Models\Slider;
 use App\Models\Coupon;
+use App\Models\CatePost;
 session_start();
 
 class CartController extends Controller
@@ -100,12 +101,14 @@ class CartController extends Controller
        $meta_keywords = "Giỏ hàng Ajax";
        $meta_title = "Giỏ hàng";
        $url_canonical = $request->url();
+       $category_post = CatePost::orderBy('cate_post_id','DESC')->get();
+
        //--seo
        $cate_product = DB::table('tbl_category_product')->where('category_status','1')->orderby('category_id','desc')->get(); 
        $brand_product = DB::table('tbl_brand')->where('brand_status','1')->orderby('brand_id','desc')->get(); 
        $slider = Slider::orderby('slider_id','desc')->where('slider_status',1)->take(4)->get();
 
-       return view('pages.cart.show_cart',compact('cate_product','brand_product','meta_desc','meta_keywords','meta_title','url_canonical','slider'));
+       return view('pages.cart.show_cart',compact('cate_product','brand_product','meta_desc','meta_keywords','meta_title','url_canonical','slider','category_post'));
    }    
 
    public function update_cart(Request $request){

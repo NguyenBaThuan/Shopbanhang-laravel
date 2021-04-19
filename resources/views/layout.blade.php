@@ -26,7 +26,9 @@
     <link href="{{asset('public/frontend/css/price-range.css')}}" rel="stylesheet">
     <link href="{{asset('public/frontend/css/animate.css')}}" rel="stylesheet">
 	<link href="{{asset('public/frontend/css/main.css')}}" rel="stylesheet">
-	<link href="{{asset('public/frontend/css/responsive.css')}}" rel="stylesheet">     
+	<link href="{{asset('public/frontend/css/responsive.css')}}" rel="stylesheet"> 
+	<link href="{{asset('public/frontend/css/lightgallery.min.css')}}" rel="stylesheet">  
+	<link href="{{asset('public/frontend/css/lightslider.css')}}" rel="stylesheet">      
     <link rel="shortcut icon" href="{{asset('public/frontend/images/favicon.ico')}}">
 	<link rel="stylesheet" href="{{asset('public/frontend/css/sweetalert.css')}}">
     <link rel="apple-touch-icon-precomposed" sizes="144x144" href="images/apple-touch-icon-144-precomposed.png">
@@ -158,15 +160,22 @@
 								<li><a href="{{url('trang-chu')}}" class="active">Trang chủ</a></li>
 								<li class="dropdown"><a href="#">Sản phẩm<i class="fa fa-angle-down"></i></a>
                                     <ul role="menu" class="sub-menu">
-                                        <li><a href="shop.html">Products</a></li>
-										 
+										@foreach($cate_product as $key => $danhmuc)
+                                        <li><a href="{{URL::to('/danh-muc/'.$danhmuc->slug_category_product)}}">{{$danhmuc->category_name}}</a></li>
+                                        @endforeach 
                                     </ul>
                                 </li> 
-								<li class="dropdown"><a href="#">Tin tức<i class="fa fa-angle-down"></i></a>
-                                   
+								<li class="dropdown"><a href="#">Tin tức<i class="fa fa-angle-down"></i></a>
+                                    <ul role="menu" class="sub-menu">
+                                       @foreach($category_post as $key => $danhmucbaiviet)
+                                        <li><a href="{{URL::to('/danh-muc-bai-viet/'.$danhmucbaiviet->cate_post_slug)}}">{{$danhmucbaiviet->cate_post_name}}</a></li>
+										@endforeach
+                                      
+                                    </ul>
                                 </li> 
-								<li><a href="404.html">Giỏ hàng</a></li>
-								<li><a href="contact-us.html">Liên hệ</a></li>
+								<li><a href="{{URL::to('/gio-hang')}}">Giỏ hàng</a></li>
+                                <li><a href="{{URL::to('/video-shop')}}">Videos Shop</a></li>
+                                <li><a href="{{URL::to('/lien-he')}}">Liên hệ</a></li>
 							</ul>
 						</div>
 					</div>
@@ -241,9 +250,28 @@
 						<div class="panel-group category-products" id="accordian"><!--category-productsr-->
 							@foreach($cate_product as $key => $cate)
 							<div class="panel panel-default">
+								@if($cate->category_parent==0)
 								<div class="panel-heading">
-									<h4 class="panel-title"><a href="{{url('/danh-muc/'.$cate->slug_category_product)}}">{{$cate->category_name}}</a></h4>
+									<h4 class="panel-title">
+										<a data-toggle="collapse" data-parent="#accordian" href="#{{$cate->slug_category_product}}">
+											<span class="badge pull-right"><i class="fa fa-plus"></i></span>
+											{{$cate->category_name}}
+										</a>
+									</h4>
 								</div>
+								<div id="{{$cate->slug_category_product}}" class="panel-collapse collapse">
+									<div class="panel-body">
+										<ul>
+											@foreach($cate_product as $key => $cate_sub)
+												@if($cate_sub->category_parent==$cate->category_id)
+													<li><a href="{{url('/danh-muc/'.$cate_sub->slug_category_product)}}">{{$cate_sub->category_name}}</a></li>
+												@endif
+											@endforeach
+											
+										</ul>
+									</div>
+								</div>
+								@endif
 							</div>
 							@endforeach
 						</div><!--/category-products-->
@@ -439,6 +467,10 @@
     <script src="{{asset('public/frontend/js/jquery.prettyPhoto.js')}}"></script>
     <script src="{{asset('public/frontend/js/main.js')}}"></script>
 	<script src="{{asset('public/frontend/js/sweetalert.js')}}"></script>
+	<script src="{{asset('public/frontend/js/lightgallery-all.min.js')}}"></script>
+	<script src="{{asset('public/frontend/js/lightslider.js')}}"></script>
+	<script src="{{asset('public/frontend/js/prettify.js.js')}}"></script>
+	
 	<script src="https://www.google.com/recaptcha/api.js" async defer></script>  
 	<div id="fb-root"></div>
 	<script async defer crossorigin="anonymous" 
@@ -447,7 +479,27 @@
 
 
 
-
+	{{-- them  layout gallery hình ảnh --}}
+	<script type="text/javascript">
+		$(document).ready(function() {
+		   $('#imageGallery').lightSlider({
+   
+			   gallery:true,
+			   item:1,
+			   loop:true,
+			   thumbItem:3,
+			   slideMargin:0,
+			   enableDrag: false,
+			   currentPagerPosition:'left',
+			   onSliderLoad: function(el) {
+				   el.lightGallery({
+					   selector: '#imageGallery .lslide'
+				   });
+			   }
+   
+		   });  
+		 });
+   </script>
 
 	<script type="text/javascript">
 		 $(document).ready(function(){

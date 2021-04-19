@@ -5,6 +5,7 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 use App\Models\Admin;
 
 
@@ -32,6 +33,12 @@ class BladeServicProvider extends ServiceProvider
                 if(Auth::user()->hasAnyRoles($expression)){
                     return true;
                 }
+            }
+            return false;
+        });
+        Blade::if('impersonate',function(){
+            if(Session::get('impersonate')){
+                return true;
             }
             return false;
         });

@@ -14,6 +14,7 @@ use App\Models\Wards;
 use App\Models\Feeship;
 use App\Models\Slider;
 use App\Models\Shipping;
+use App\Models\CatePost;
 use App\Models\Order;
 use App\Models\OrderDetails;
 
@@ -141,12 +142,14 @@ class CheckoutController extends Controller
         $meta_keywords = "Đăng nhập thanh toán";
         $meta_title = "Đăng nhập thanh toán";
         $url_canonical = $request->url();
+        $category_post = CatePost::orderBy('cate_post_id','DESC')->get();
+
         //--seo 
 
     	$cate_product = DB::table('tbl_category_product')->where('category_status','1')->orderby('category_id','desc')->get();
         $brand_product = DB::table('tbl_brand')->where('brand_status','1')->orderby('brand_id','desc')->get(); 
 
-    	return view('pages.checkout.login_checkout',compact('cate_product','brand_product','slider','meta_desc','meta_keywords','meta_title','url_canonical'));
+    	return view('pages.checkout.login_checkout',compact('cate_product','brand_product','slider','meta_desc','meta_keywords','meta_title','url_canonical','category_post'));
     }
     public function add_customer(Request $request){
 

@@ -43,6 +43,7 @@
                                 </label>
                             </th>
                             <th>Tên sản phẩm</th>
+                            <th>Thư viện ảnh</th>
                             <th>Số lượng</th>
                             <th>Giá</th>
                             <th>Hình ảnh</th>
@@ -57,6 +58,7 @@
                         <tr>
                             <td><label class="i-checks m-b-none"><input type="checkbox" name="post[]"><i></i></label></td>
                             <td>{{$product_value->product_name}}</td>
+                            <td><a href="{{'add-gallery/'.$product_value->product_id}}">Thêm thư viện ảnh</a></td>
                             <td>{{$product_value->product_quantity}}</td>
                             <td>{{$product_value->product_price}}</td>
                             <td><img src="public/uploads/product/{{$product_value->product_image}}" height="100px" width="100px"></td>

@@ -15,6 +15,9 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\SliderController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\CategoryPost;
+use App\Http\Controllers\PostController;
+use App\Http\Controllers\GalleryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -65,12 +68,15 @@ Route::get('/active-brand-product/{brand_product_id}',[BrandProduct::class, 'act
 Route::post('/save-brand-product',[BrandProduct::class, 'save_brand_product']);
 
 // Product 
+Route::group(['middleware' => 'auth.roles'],function(){
+    Route::get('/all-product',[ProductController::class, 'all_product']);
+    Route::get('/add-product',[ProductController::class, 'add_product']);
+});
 
-Route::get('/add-product',[ProductController::class, 'add_product']);
 Route::get('/edit-product/{product_id}',[ProductController::class, 'edit_product']);
 Route::post('/update-product/{product_id}',[ProductController::class, 'update_product']);
 Route::get('/delete-product/{product_id}',[ProductController::class, 'delete_product']);
-Route::get('/all-product',[ProductController::class, 'all_product']);
+
 Route::get('/unactive-product/{product_id}',[ProductController::class, 'unactive_product']);
 Route::get('/active-product/{product_id}',[ProductController::class, 'active_product']);
 Route::post('/save-product',[ProductController::class, 'save_product']);
@@ -144,10 +150,44 @@ Route::get('/logout-auth',[AuthController::class, 'logout_auth']);
 Route::post('/login',[AuthController::class, 'login']);
 
 // Users
-Route::get('/users',[UserController::class, 'index']);
-Route::get('/add-users',[UserController::class, 'add_users']);
+Route::get('/users',[UserController::class, 'index'])->middleware('auth.roles');
+Route::get('/add-users',[UserController::class, 'add_users'])->middleware('auth.roles');
 Route::post('/store-users',[UserController::class, 'store_users']);
-Route::post('/ assign-roles',[UserController::class, 'assign_roles']);
+Route::get('/delete-user-roles/{admin_id}',[UserController::class, 'delete_user_roles']);
+Route::get('/impersonate/{admin_id}',[UserController::class, 'impersonate']);
+Route::get('/impersonate-destroy',[UserController::class, 'impersonate_destroy']);
+Route::post('/assign-roles',[UserController::class, 'assign_roles'])->middleware('auth.roles');
+//Category Post
+
+Route::get('/add-category-post',[CategoryPost::class, 'add_category_post']);
+Route::get('/all-category-post',[CategoryPost::class, 'all_category_post']);
+Route::get('/edit-category-post/{category_post_id}',[CategoryPost::class, 'edit_category_post']);
+
+Route::post('/save-category-post',[CategoryPost::class, 'save_category_post']);
+Route::post('/update-category-post/{cate_id}',[CategoryPost::class, 'update_category_post']);
+Route::get('/delete-category-post/{cate_id}',[CategoryPost::class, 'delete_category_post']);
+
+//Post
+Route::get('/add-post',[PostController::class, 'add_post']);
+Route::get('/all-post',[PostController::class, 'all_post']);
+Route::get('/edit-post/{post_id}',[PostController::class, 'edit_post']);
+
+Route::post('/save-post',[PostController::class, 'save_post']);
+Route::post('/update-post/{cate_id}',[PostController::class, 'update_post']);
+Route::get('/delete-post/{cate_id}',[PostController::class, 'delete_post']);
+
+//Bai viet
+Route::get('/danh-muc-bai-viet/{post_slug}',[PostController::class, 'danh_muc_bai_viet']);
+Route::get('/bai-viet/{post_slug}',[PostController::class, 'bai_viet']);
+
+// Gallery
+Route::get('/add-gallery/{product_id}',[GalleryController::class, 'add_gallery']);
+Route::post('/select-gallery',[GalleryController::class, 'select_gallery']);
+Route::post('/insert-gallery/{product_id}',[GalleryController::class, 'insert_gallery']);
+Route::post('/delete-gallery',[GalleryController::class, 'delete_gallery']);
+Route::post('/update-gallery',[GalleryController::class, 'update_gallery']);
+Route::post('/update-gallery-name',[GalleryController::class, 'update_gallery_name']);
+
 
 
 

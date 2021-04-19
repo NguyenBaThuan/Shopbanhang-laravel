@@ -9,13 +9,15 @@ use Illuminate\Support\Facades\Redirect;
 use App\Models\BrandModel;
 use App\Models\Slider;
 use App\Models\CategoryProductModel;
+use App\Models\CatePost;
+use Illuminate\Support\Facades\Auth;
 
 session_start();
 
 class BrandProduct extends Controller
 {
     public function AuthLogin(){
-        $admin_id = Session::get('admin_id');
+        $admin_id = Auth::id();
         if($admin_id){
             return Redirect::to('admin.dashboard');
         }
@@ -90,6 +92,7 @@ class BrandProduct extends Controller
 
     //End function admin pages
     public function show_brand_home(Request $request ,$brand_slug){
+        $category_post = CatePost::orderBy('cate_post_id','DESC')->get();
         $slider = Slider::orderby('slider_id','desc')->where('slider_status',1)->take(4)->get();
         $cate_product = CategoryProductModel::where('category_status',1)->orderby('category_id','desc')->get();
         $brand_product = BrandModel::where('brand_status',1)->orderby('brand_id','desc')->get();
@@ -107,6 +110,6 @@ class BrandProduct extends Controller
             //--seo
         }
 
-        return view('pages.brand.show_brand',compact('brand_product','cate_product','brand_by_id','brand_name','meta_desc','meta_keywords','meta_title','url_canonical','slider'));
+        return view('pages.brand.show_brand',compact('brand_product','cate_product','brand_by_id','brand_name','meta_desc','meta_keywords','meta_title','url_canonical','slider','category_post'));
     }
 }

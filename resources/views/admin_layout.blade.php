@@ -19,6 +19,8 @@
     <!-- bootstrap-css -->
     <link rel="stylesheet" href="{{asset('public/backend/css/bootstrap.min.css')}}">
     <!-- //bootstrap-css -->
+    <meta name="csrf-token" content="{{csrf_token()}}">
+
     <!-- Custom CSS -->
     <link href="{{asset('public/backend/css/style.css')}}" rel='stylesheet' type='text/css' />
     <link href="{{asset('public/backend/css/style-responsive.css')}}" rel="stylesheet" />
@@ -64,7 +66,7 @@
                     <!-- user login dropdown start-->
                     <li class="dropdown">
                         <a data-toggle="dropdown" class="dropdown-toggle" href="#">
-                            <img alt="" src="public/backend/images/2.png">
+                            <img alt="" src="{{asset('public/backend/images/2.png')}}">
                             <span class="username">
                                 <?php
                                     $admin_name =Auth::user()->admin_name;
@@ -182,6 +184,55 @@
                               
                             </ul>
                         </li> 
+                        <li class="sub-menu">
+                            <a href="javascript:;">
+                                <i class="fa fa-book"></i>
+                                <span>Bình luận</span>
+                            </a>
+                            <ul class="sub">
+                                <li><a href="{{URL::to('/comment')}}">Liệt kê bình luận</a></li>
+                            </ul>
+                        </li>
+                        <li class="sub-menu">
+                            <a href="javascript:;">
+                                <i class="fa fa-book"></i>
+                                <span>Danh mục bài viết</span>
+                            </a>
+                            <ul class="sub">
+                                <li><a href="{{URL::to('/add-category-post')}}">Thêm danh mục bài viết</a></li>
+                                <li><a href="{{URL::to('/all-category-post')}}">Liệt kê danh mục bài viết</a></li>
+                              
+                            </ul>
+                        </li>
+                        <li class="sub-menu">
+                            <a href="javascript:;">
+                                <i class="fa fa-book"></i>
+                                <span>Bài viết</span>
+                            </a>
+                            <ul class="sub">
+                                 <li><a href="{{URL::to('/add-post')}}">Thêm bài viết</a></li>
+                                <li><a href="{{URL::to('/all-post')}}">Liệt kê bài viết</a></li>
+                              
+                            </ul>
+                        </li>
+                        <li class="sub-menu">
+                            <a href="javascript:;">
+                                <i class="fa fa-book"></i>
+                                <span>Video</span>
+                            </a>
+                            <ul class="sub">
+                                <li><a href="{{URL::to('video')}}">Thêm video</a></li>
+                            
+                              
+                            </ul>
+                        </li>
+                            @impersonate
+                            <li>
+                   
+                                <span><a href="{{URL::to('/impersonate-destroy')}}">Stop chuyển quyền</a></span>
+                              
+                            </li>
+                            @endimpersonate
                            {{-- User --}}
                            @hasrole(['admin','author'])
                            <li class="sub-menu">
@@ -225,6 +276,153 @@
     <!--[if lte IE 8]><script language="javascript" type="text/javascript" src="public/backend/js/flot-chart/excanvas.min.js"></script><![endif]-->
     <script src="{{asset('public/backend/js/jquery.scrollTo.js')}}"></script>
     <script src="{{asset('public/backend/ckeditor/ckeditor.js')}}"></script>
+
+    {{-- Xử lý gallery --}}
+    <script type="text/javascript">
+    $(document).ready(function(){
+        load_gallery();
+
+        function load_gallery(){
+            var pro_id = $('.pro_id').val();
+            var _token = $('input[name="_token"]').val();
+            // alert(pro_id);
+            $.ajax({
+                url:"{{url('/select-gallery')}}",
+                method:"POST",
+                data:{pro_id:pro_id,_token:_token},
+                success:function(data){
+                    $('#gallery_load').html(data);
+                }
+            });
+        }
+
+        $('#file').change(function(){
+            var error = '';
+            var files = $('#file')[0].files;
+
+            if(files.length>5){
+                error+='<p>Bạn chọn tối đa chỉ được 5 ảnh</p>';
+            }else if(files.length==''){
+                error+='<p>Bạn không được bỏ trống ảnh</p>';
+            }else if(files.size > 2000000){
+                error+='<p>File ảnh không được lớn hơn 2MB</p>';
+            }
+
+            if(error==''){
+
+            }else{
+                $('#file').val('');
+                $('#error_gallery').html('<span class="text-danger">'+error+'</span>');
+                return false;
+            }
+
+        });
+
+        $(document).on('blur','.edit_gal_name',function(){
+            var gal_id = $(this).data('gal_id');
+            var gal_text = $(this).text();
+            var _token = $('input[name="_token"]').val();
+            $.ajax({
+                url:"{{url('/update-gallery-name')}}",
+                method:"POST",
+                data:{gal_id:gal_id,gal_text:gal_text,_token:_token},
+                success:function(data){
+                    load_gallery();
+                    $('#error_gallery').html('<span class="text-danger">Cập nhật tên hình ảnh thành công</span>');
+                }
+            });
+        });
+
+        $(document).on('click','.delete-gallery',function(){
+            var gal_id = $(this).data('gal_id');
+          
+            var _token = $('input[name="_token"]').val();
+            if(confirm('Bạn muốn xóa hình ảnh này không?')){
+                $.ajax({
+                    url:"{{url('/delete-gallery')}}",
+                    method:"POST",
+                    data:{gal_id:gal_id,_token:_token},
+                    success:function(data){
+                        load_gallery();
+                        $('#error_gallery').html('<span class="text-danger">Xóa hình ảnh thành công</span>');
+                    }
+                });
+            }
+        });
+
+        $(document).on('change','.file_image',function(){
+
+            var gal_id = $(this).data('gal_id');
+            var image = document.getElementById("file-"+gal_id).files[0];
+
+            var form_data = new FormData();
+
+            form_data.append("file", document.getElementById("file-"+gal_id).files[0]);
+            form_data.append("gal_id",gal_id);
+
+
+          
+                $.ajax({
+                    url:"{{url('/update-gallery')}}",
+                    method:"POST",
+                    headers:{
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    data:form_data,
+
+                    contentType:false,
+                    cache:false,
+                    processData:false,
+                    success:function(data){
+                        load_gallery();
+                        $('#error_gallery').html('<span class="text-danger">Cập nhật hình ảnh thành công</span>');
+                    }
+                });
+            
+        });
+
+
+
+    });
+</script>
+{{-- Thay doi slug --}}
+    <script type="text/javascript">
+ 
+        function ChangeToSlug()
+            {
+                var slug;
+             
+                //Lấy text từ thẻ input title 
+                slug = document.getElementById("slug").value;
+                slug = slug.toLowerCase();
+                //Đổi ký tự có dấu thành không dấu
+                    slug = slug.replace(/á|à|ả|ạ|ã|ă|ắ|ằ|ẳ|ẵ|ặ|â|ấ|ầ|ẩ|ẫ|ậ/gi, 'a');
+                    slug = slug.replace(/ắ|ằ|ẳ|ẵ|ặ|â|ấ|ầ|ẩ|ẫ|ậ/gi , 'a');
+                    slug = slug.replace(/é|è|ẻ|ẽ|ẹ|ê|ế|ề|ể|ễ|ệ/gi, 'e');
+                    slug = slug.replace(/í|ì|ỉ|ĩ|ị/gi, 'i');
+                    slug = slug.replace(/ó|ò|ỏ|õ|ọ|ô|ố|ồ|ổ|ỗ|ộ|ơ|ớ|ờ|ở|ỡ|ợ/gi, 'o');
+                    slug = slug.replace(/ú|ù|ủ|ũ|ụ|ư|ứ|ừ|ử|ữ|ự/gi, 'u');
+                    slug = slug.replace(/ý|ỳ|ỷ|ỹ|ỵ/gi, 'y');
+                    slug = slug.replace(/đ/gi, 'd');
+                    slug = slug.replace(/\u0300|\u0301|\u0303|\u0309|\u0323/g, ""); // Huyền sắc hỏi ngã nặng
+                    slug = slug.replace(/\u02C6|\u0306|\u031B/g, ""); // Â, Ê, Ă, Ơ, Ư
+                    //Xóa các ký tự đặt biệt
+                    slug = slug.replace(/\`|\~|\!|\@|\#|\||\$|\%|\^|\&|\*|\(|\)|\+|\=|\,|\.|\/|\?|\>|\<|\'|\"|\:|\;|_/gi, '');
+                    //Đổi khoảng trắng thành ký tự gạch ngang
+                    slug = slug.replace(/ /gi, "-");
+                    //Đổi nhiều ký tự gạch ngang liên tiếp thành 1 ký tự gạch ngang
+                    //Phòng trường hợp người nhập vào quá nhiều ký tự trắng
+                    slug = slug.replace(/\-\-\-\-\-/gi, '-');
+                    slug = slug.replace(/\-\-\-\-/gi, '-');
+                    slug = slug.replace(/\-\-\-/gi, '-');
+                    slug = slug.replace(/\-\-/gi, '-');
+                    //Xóa các ký tự gạch ngang ở đầu và cuối
+                    slug = '@' + slug + '@';
+                    slug = slug.replace(/\@\-|\-\@|\@/gi, '');
+                    //In slug ra textbox có id “slug”
+                document.getElementById('convert_slug').value = slug;
+            }
+    </script>
     {{-- Tính phí vận chuyển Ajax --}}
 
     <script type="text/javascript">
@@ -385,6 +583,7 @@
     <script type="text/javascript">
         CKEDITOR.replace('ckeditor');
         CKEDITOR.replace('ckeditor1');
+        CKEDITOR.replace('ckeditor2');
     </script>
     <script src="{{asset('public/backend/js/formValidation.min.js')}}"></script>
     <script type="text/javascript">
